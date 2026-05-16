@@ -2,6 +2,7 @@ package org.example;
 
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,7 +14,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try (Reader reader = new InputStreamReader(new FileInputStream(file))) {
+        try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
             int a = reader.read();
             StringBuilder result = new StringBuilder();
             while (a != -1) {
