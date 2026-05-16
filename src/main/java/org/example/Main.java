@@ -13,15 +13,14 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try (InputStream inputStream = new FileInputStream(file)) {
-            byte[] array = new byte[8]; // Создадим массив на 1 тыс. байт
-            int count = inputStream.read(array); // передаём массив, получает кол-во элементов которое было прочитано
+        try (Reader reader = new InputStreamReader(new FileInputStream(file))) {
+            int a = reader.read();
             StringBuilder result = new StringBuilder();
-            while (count > 0) { // читаем до тех пор, пока кол-во элементов > 0
-                result.append(new String(array, 0,count)); // создаем строку из массива байт
-                count = inputStream.read(array);
+            while (a != -1) {
+                result.append((char) a);
+                a = reader.read();
             }
-            System.out.println(result.toString()); // преобразуем в строку
+            System.out.println(result.toString());
 
         } catch (Exception e) {
             e.printStackTrace();
