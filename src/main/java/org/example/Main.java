@@ -15,11 +15,12 @@ public class Main {
         }
         try (InputStream inputStream = new FileInputStream(file)) {
             long before = System.currentTimeMillis();
-            int a = inputStream.read();
-            StringBuilder result = new StringBuilder(); // StringBuilder метод для добавления строковых символов
-            while (a != -1) {
-                result.append((char) a); // добавляем символ
-                a = inputStream.read(); // читаем следующий
+            byte[] array = new byte[1024]; // Создадим массив на 1 тыс. байт
+            int count = inputStream.read(array); // передаём массив, получает кол-во элементов которое было прочитано
+            StringBuilder result = new StringBuilder();
+            while (count > 0) { // читаем до тех пор, пока кол-во элементов > 0
+                result.append(new String(array)); // создаем строку из массива байт
+                count = inputStream.read(array);
             }
             System.out.println(result.toString()); // преобразуем в строку
             long after = System.currentTimeMillis();
