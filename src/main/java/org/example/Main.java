@@ -5,20 +5,28 @@ import java.io.*;
 
 public class Main {
     public static void main(String[] args) {
-        File file = new File("1.txt");
+        File directory = new File("folder");
+        directory.mkdir();
+        File file = new File(directory, "text.txt");
         try {
             file.createNewFile();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-        try(InputStream inputStream = new FileInputStream(file)) { // создаём поток в конструкции try
-            int a = inputStream.read(); // читаем и записываем значение байта
+        try (InputStream inputStream = new FileInputStream(file)) {
+            long before = System.currentTimeMillis();
+            int a = inputStream.read();
+            StringBuilder result = new StringBuilder(); // StringBuilder метод для добавления строковых символов
             while (a != -1) {
-                System.out.print((char) a);
-                a = inputStream.read(); // читаем следующий символ
+                result.append((char) a); // добавляем символ
+                a = inputStream.read(); // читаем следующий
             }
-        } catch (Exception e) { // будем ловить все исключения
-            throw new RuntimeException(e);
+            System.out.println(result.toString()); // преобразуем в строку
+            long after = System.currentTimeMillis();
+            System.out.println("Time - " + (after - before));
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
