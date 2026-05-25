@@ -2,27 +2,29 @@ package org.example;
 
 
 import java.io.*;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        File directory = new File("folder");
-        File file = new File(directory, "names.txt");
-        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Enter next page or \"stop\" to exit");
-            byte[] pageText = new byte[3000];
-            String input = scanner.nextLine();
-            while (!input.equals("stop")) {
-                int page = Integer.parseInt(input);
-                randomAccessFile.seek((page - 1) * pageText.length);
-                int count = randomAccessFile.read(pageText);
-                System.out.println(new String(pageText, 0, count));
-                System.out.println("Enter next page or \"stop\" to exit");
-                input = scanner.nextLine();
-            }
+        File file = new File("folder/users.usr");
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        User user = new User("John", "Smith", 25, new Address("Main", 10));
+
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file))) {
+            objectOutputStream.writeObject(user);
+
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file))) {
+            User saveduser = (User) objectInputStream.readObject();
+            System.out.println(saveduser);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
